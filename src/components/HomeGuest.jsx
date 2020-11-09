@@ -1,8 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Page from './Page'
+import Axios from 'axios';
 
 const HomeGuest = () => {
+
+    const [username, setUserName] = useState()
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+        try {
+            await Axios.post("http://localhost:8080/register", { username, email, password })
+            console.log("User was successfully created.")
+        } catch (e) {
+            console.log(e.response.data)
+        }
+    }
+
+
     return (
-        <div className="container py-md-5">
+        <Page title='Welcome!' wide={true}>
             <div className="row align-items-center">
                 <div className="col-lg-7 py-3 py-md-5">
                     <h1 className="display-3">Remember Writing?</h1>
@@ -11,26 +29,26 @@ const HomeGuest = () => {
             enjoying the internet again.</p>
                 </div>
                 <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="username-register" className="text-muted mb-1">
                                 <small>Username</small>
                             </label>
-                            <input id="username-register" name="username" className="form-control" type="text"
+                            <input onChange={e => setUserName(e.target.value)} id="username-register" name="username" className="form-control" type="text"
                                 placeholder="Pick a username" autoComplete="off" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="email-register" className="text-muted mb-1">
                                 <small>Email</small>
                             </label>
-                            <input id="email-register" name="email" className="form-control" type="text" placeholder="you@example.com"
+                            <input onChange={e => setEmail(e.target.value)} id="email-register" name="email" className="form-control" type="text" placeholder="you@example.com"
                                 autoComplete="off" />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password-register" className="text-muted mb-1">
                                 <small>Password</small>
                             </label>
-                            <input id="password-register" name="password" className="form-control" type="password"
+                            <input onChange={e => setPassword(e.target.value)} id="password-register" name="password" className="form-control" type="password"
                                 placeholder="Create a password" />
                         </div>
                         <button type="submit" className="py-3 mt-4 btn btn-lg btn-success btn-block">
@@ -39,9 +57,20 @@ const HomeGuest = () => {
                     </form>
                 </div>
             </div>
-        </div>
+        </Page>
 
     )
 }
 
 export default HomeGuest
+
+
+/* async function handleSubmit(e) {
+    e.preventDefault()
+    try {
+      await Axios.post("http://localhost:8080/register", { username, email, password })
+      console.log("User was successfully created.")
+    } catch (e) {
+      console.log("There was an error.")
+    }
+  } */
