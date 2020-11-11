@@ -1,17 +1,23 @@
 import Axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import ExampleContext from '../ExampleContext'
 
 
-const HeaderLoggedOut = () => {
+const HeaderLoggedOut = (props) => {
+    const { setLoggedIn } = useContext(ExampleContext)
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
+
 
     async function handleSubmit(e) {
         e.preventDefault()
         try {
-            const response = await Axios.post("http://localhost:8080/login", { username, password })
+            const response = await Axios.post("/login", { username, password })
             if (response.data) {
-                console.log(response.data)
+                localStorage.setItem('complexAppToken', response.data.token)
+                localStorage.setItem('complexAppUsername', response.data.username)
+                localStorage.setItem('complexAppAvatar', response.data.avatar)
+                setLoggedIn(true)
             } else {
                 console.log("incorrect username / password.")
             }
